@@ -1,0 +1,21 @@
+name: post-deploy
+
+on:
+  deployment:
+
+jobs:
+  post-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - name: Show what was deployed
+        run: |
+          echo "App:  ${{ github.event.deployment.environment }}"
+          echo "SHA:  ${{ github.event.deployment.sha }}"
+          echo "Argo: ${{ github.event.deployment.payload.argocd_url }}"
